@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://dmsqeaci6udju"]
+
+[node name="TestA" type="Node2D" unique_id=829619526]
+
+[node name="Label" type="Label" parent="." unique_id=583536108]
+offset_left = 250.0
+offset_top = 102.0
+offset_right = 320.0
+offset_bottom = 139.0
+text = "TestA"

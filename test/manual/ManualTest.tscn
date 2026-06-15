@@ -1,0 +1,82 @@
+[gd_scene format=3 uid="uid://d2o42yoed6xfc"]
+
+[ext_resource type="Script" uid="uid://beqckyith2nk5" path="res://test/manual/AlertTest.gd" id="1_00byy"]
+[ext_resource type="Script" uid="uid://cmruqediscjxf" path="res://test/manual/SceneTest.gd" id="2_4dfa1"]
+[ext_resource type="Script" uid="uid://bosk23klfwanp" path="res://test/manual/AudioTest.gd" id="3_suq2o"]
+[ext_resource type="Script" uid="uid://dhwft2mh0eyu1" path="res://test/manual/HttpTest.gd" id="4_bs2af"]
+
+[node name="Test" type="Node" unique_id=1622393824]
+
+[node name="AlertTest" type="Node" parent="." unique_id=1998129573]
+script = ExtResource("1_00byy")
+
+[node name="SceneTest" type="Node" parent="." unique_id=188899326]
+script = ExtResource("2_4dfa1")
+
+[node name="SceneToMain" type="Button" parent="SceneTest" unique_id=423978819]
+offset_left = 54.0
+offset_top = 139.0
+offset_right = 289.0
+offset_bottom = 170.0
+text = "SceneToMain"
+
+[node name="AddNode" type="Button" parent="SceneTest" unique_id=1743778732]
+offset_left = 365.0
+offset_top = 142.0
+offset_right = 600.0
+offset_bottom = 173.0
+text = "AddNode"
+
+[node name="AudioTest" type="Node" parent="." unique_id=247811349]
+script = ExtResource("3_suq2o")
+
+[node name="PlayMusic" type="Button" parent="AudioTest" unique_id=1860401301]
+offset_left = 54.0
+offset_top = 27.0
+offset_right = 289.0
+offset_bottom = 58.0
+text = "PlayMusic"
+metadata/_edit_use_anchors_ = true
+
+[node name="PlaySound" type="Button" parent="AudioTest" unique_id=390025466]
+offset_left = 365.0
+offset_top = 27.0
+offset_right = 600.0
+offset_bottom = 58.0
+text = "PlaySound"
+metadata/_edit_use_anchors_ = true
+
+[node name="HttpTest" type="Node" parent="." unique_id=243363440]
+script = ExtResource("4_bs2af")
+
+[node name="GetRequest" type="Button" parent="HttpTest" unique_id=1850922775]
+offset_left = 54.0
+offset_top = 239.0
+offset_right = 289.0
+offset_bottom = 270.0
+text = "GetRequest"
+metadata/_edit_use_anchors_ = true
+
+[node name="GetRequestChunk" type="Button" parent="HttpTest" unique_id=1452549546]
+offset_left = 365.0
+offset_top = 239.0
+offset_right = 600.0
+offset_bottom = 270.0
+text = "GetRequestChunk"
+metadata/_edit_use_anchors_ = true
+
+[node name="GetRequestFile" type="Button" parent="HttpTest" unique_id=1937154809]
+offset_left = 671.0
+offset_top = 239.0
+offset_right = 906.0
+offset_bottom = 270.0
+text = "GetRequestFile"
+metadata/_edit_use_anchors_ = true
+
+[node name="PostRequest" type="Button" parent="HttpTest" unique_id=614972845]
+offset_left = 54.0
+offset_top = 320.0
+offset_right = 289.0
+offset_bottom = 351.0
+text = "PostRequest"
+metadata/_edit_use_anchors_ = true

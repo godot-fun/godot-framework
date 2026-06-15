@@ -1,3 +1,5 @@
+test.html
+
 # Godot 4+ specific ignores
 .godot/
 .nomedia
@@ -15,3 +17,14 @@ export_credentials.cfg
 .mono/
 data_*/
 mono_crash.*.json
+
+
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
