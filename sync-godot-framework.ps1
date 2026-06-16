@@ -1,15 +1,9 @@
-# 从 godot-fun/godot-framework 同步 .cursor 与 zfoo 到本项目。
-# 用法（在项目根目录）:
+# Sync .cursor and zfoo from godot-fun/godot-framework into this project.
+# Usage (from project root):
 #   powershell -ExecutionPolicy Bypass -File sync-godot-framework.ps1
-#
-# 可选参数:
-#   -UseZip    下载 ZIP 并解压（不依赖 git）
-#   -Branch    分支名，默认 main
 
 param(
-	[string]$RepoUrl = "https://github.com/godot-fun/godot-framework.git",
-	[string]$Branch = "main",
-	[switch]$UseZip
+	[string]$RepoUrl = "https://github.com/godot-fun/godot-framework.git"
 )
 
 $ErrorActionPreference = "Stop"
@@ -17,7 +11,6 @@ $ErrorActionPreference = "Stop"
 $ProjectRoot = Resolve-Path $PSScriptRoot
 $TempRoot = Join-Path $env:TEMP ("godot-framework-sync-{0}" -f [guid]::NewGuid().ToString("N"))
 $CloneDir = $TempRoot
-$ExtractedRoot = $null
 
 New-Item -ItemType Directory -Path $TempRoot -Force | Out-Null
 
@@ -50,34 +43,13 @@ function Copy-FrameworkDirs {
 }
 
 try {
-	if ($UseZip) {
-		$zipUrl = "https://github.com/godot-fun/godot-framework/archive/refs/heads/$Branch.zip"
-		$zipFile = Join-Path $TempRoot "godot-framework.zip"
-
-		Write-Host "Downloading $zipUrl ..."
-		Invoke-WebRequest -Uri $zipUrl -OutFile $zipFile
-
-		Write-Host "Extracting archive ..."
-		Expand-Archive -Path $zipFile -DestinationPath $TempRoot -Force
-
-		$ExtractedRoot = Get-ChildItem -Path $TempRoot -Directory |
-			Where-Object { $_.Name -like "godot-framework-*" } |
-			Select-Object -First 1
-
-		if (-not $ExtractedRoot) {
-			throw "Failed to locate extracted repository directory."
-		}
-
-		Copy-FrameworkDirs -SourceRoot $ExtractedRoot.FullName
-	} else {
-		Write-Host "Cloning $RepoUrl (branch: $Branch) ..."
-		git clone --depth 1 --branch $Branch $RepoUrl $CloneDir
-		if ($LASTEXITCODE -ne 0) {
-			throw "git clone failed with exit code $LASTEXITCODE"
-		}
-
-		Copy-FrameworkDirs -SourceRoot $CloneDir
+	Write-Host "Cloning $RepoUrl ..."
+	git clone --depth 1 $RepoUrl $CloneDir
+	if ($LASTEXITCODE -ne 0) {
+		throw "git clone failed with exit code $LASTEXITCODE"
 	}
+
+	Copy-FrameworkDirs -SourceRoot $CloneDir
 
 	Write-Host "Sync completed."
 } catch {
