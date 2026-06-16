@@ -1,7 +1,6 @@
 # godot-framework
 
-A lightweight game framework for Godot 4.x (GDScript). Business code lives in your project; reusable infrastructure
-lives in `zfoo/`.
+A lightweight game framework for godot engine
 
 ## Quick start
 
@@ -9,7 +8,7 @@ lives in `zfoo/`.
 2. Register the framework scene as an **Autoload** (Project → Project Settings → Autoload):
 
    | Name            | Path                          |
-                  |-----------------|-------------------------------|
+   |-----------------|-------------------------------|
    | `GodotFramework` | `res://zfoo/GodotFramework.tscn` |
 
 3. Ensure `GodotFramework` loads **before** any scene that uses framework APIs. On startup, `gdf` initializes logging,
