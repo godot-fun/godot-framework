@@ -73,11 +73,15 @@ static func date_ago(ctime: int) -> String:
 	var delta_ms: int = TimeUtils.current_time_millis() - ctime
 	if delta_ms < 0:
 		return date_mmddhhmm(ctime)
+	@warning_ignore("integer_division")
 	var delta_sec: int = delta_ms / TimeUtils.MILLIS_PER_SECOND
 	if delta_sec < 60:
 		return "Just now"
 	if delta_sec < 3600:
+		@warning_ignore("integer_division")
 		return StringUtils.format("{}m ago", delta_sec / 60)
 	if delta_sec < 86400:
+		@warning_ignore("integer_division")
 		return StringUtils.format("{}h ago", delta_sec / 3600)
+	@warning_ignore("integer_division")
 	return StringUtils.format("{}d ago", delta_sec / 86400)

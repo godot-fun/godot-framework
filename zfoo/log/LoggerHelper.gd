@@ -12,6 +12,7 @@ static func init() -> void:
 	pass
 
 
+@warning_ignore("unused_parameter")
 static func format_error_message(function: String, file: String, line: int, code: String, rationale: String, editor_notify: bool, error_type: int, script_backtraces: Array[ScriptBacktrace]) -> String:
 	# Match Godot console-like format as much as possible.
 	var first_line := ""
