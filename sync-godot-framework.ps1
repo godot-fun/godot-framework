@@ -1,6 +1,6 @@
 # Sync .cursor and zfoo from godot-fun/godot-framework into this project.
 # Usage (from project root):
-#   powershell -ExecutionPolicy Bypass -File sync-godot-framework.ps1
+#   .\sync-godot-framework.ps1
 
 param(
 	[string]$RepoUrl = "https://github.com/godot-fun/godot-framework.git"
