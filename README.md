@@ -4,13 +4,8 @@ A lightweight game framework for godot engine
 
 ## Quick start
 
-1. Copy the `zfoo/` folder into your Godot project.
-2. Register the framework scene as an **Autoload** (Project → Project Settings → Autoload):
-
-   | Name            | Path                          |
-   |-----------------|-------------------------------|
-   | `GodotFramework` | `res://zfoo/GodotFramework.tscn` |
-
+1. Copy the this repository into your Godot project.
+2. Register the framework `GodotFramework.tscn` as an **Autoload** (Project → Project Settings → Autoload):
 3. Ensure `GodotFramework` loads **before** any scene that uses framework APIs. On startup, `gdf` initializes logging,
    audio buses, and a top-level UI layer (`gdf_layer`).
 
@@ -58,7 +53,7 @@ var playing := Audio.is_playing_voice()
 
 ## Unit tests
 
-- Attach `zfoo/gdtest/UnitTest.gd` to a scene; `.gd` files in the same folder are scanned on startup.
+- Attach `gdtest/UnitTest.gd` to a scene; `.gd` files in the same folder are scanned on startup.
 - Any method whose name **starts or ends with `test`** (case-insensitive, no arguments) is run as a unit test.
 
 ---
