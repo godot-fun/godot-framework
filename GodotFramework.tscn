@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ctmudwtl4fvnr"]
 
-[ext_resource type="Script" uid="uid://cko6l6nu4gaa5" path="res://zfoo/GodotFramework.gd" id="1_dgh6h"]
+[ext_resource type="Script" uid="uid://cko6l6nu4gaa5" path="res://GodotFramework.gd" id="1_dgh6h"]
 
 [node name="zfoo" type="Node" unique_id=617812293]
 script = ExtResource("1_dgh6h")
