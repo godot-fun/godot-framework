@@ -3,12 +3,12 @@ extends Object
 
 
 static func queue_free(node: Node) -> void:
-	if (node == null):
+	if node == null:
 		return
 	node.queue_free()
 	pass
 
-static func add_scene(node: Node, scene: PackedScene) -> Node:
+static func add_scene_to_node(scene: PackedScene, node: Node) -> Node:
 	var sceneNode := scene.instantiate()
 	node.add_child(sceneNode)
 	return sceneNode

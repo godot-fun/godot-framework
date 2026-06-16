@@ -15,5 +15,5 @@ func pressedSceneToMainButton():
 	pass
 
 func pressedSceneAddNodeButton():
-	SceneHelper.add_scene(gdf.gdf_node.get_tree().root, load("test/manual/TestA.tscn"))
+	SceneHelper.add_scene_to_node(load("test/manual/TestA.tscn"), gdf.gdf_node.get_tree().root)
 	pass
