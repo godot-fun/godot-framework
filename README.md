@@ -9,7 +9,7 @@ lives in `zfoo/`.
 2. Register the framework scene as an **Autoload** (Project → Project Settings → Autoload):
 
    | Name            | Path                          |
-               |-----------------|-------------------------------|
+                  |-----------------|-------------------------------|
    | `GodotFramework` | `res://zfoo/GodotFramework.tscn` |
 
 3. Ensure `GodotFramework` loads **before** any scene that uses framework APIs. On startup, `gdf` initializes logging,
@@ -19,15 +19,15 @@ The Autoload node runs `GodotFramework.gd`, whose global class name is `gdf`.
 
 ```gdscript
 # Defer a callable to the main thread (useful from network / worker callbacks)
-gdf.callable_deferred(func() -> void:
-    refresh_ui()
-)
+gdf.callable_deferred(func() -> void: refresh_ui())
 
 # Graceful exit (waits a few frames before quit)
 await gdf.quit()
 ```
 
 ---
+
+# Usage
 
 ## Alert — Floating toast messages
 
@@ -103,9 +103,7 @@ Log.error("load failed path:[{}] err:[{}]", path, err)
 var session: Session = TcpClient.new(Codec.new(), "127.0.0.1:80")
 
 # Register receiver (typically at login / session init)
-Router.register_receiver(LoginResponse, func(packet: LoginResponse) -> void:
-    on_login_response(packet)
-)
+Router.register_receiver(LoginResponse, func(packet: LoginResponse) -> void: on_login_response(packet))
 
 # Send message is Fire-and-forget
 Router.send(session, SomeRequest.new())
@@ -148,19 +146,13 @@ SceneHelper.queue_free(old_node)
 ## SchedulerBus — delayed & periodic tasks
 
 ```gdscript
+var sw := StopWatch.new() # sw.cost_seconds()
+
 # Run once after 1000 ms
 SchedulerBus.schedule(func() -> void: do_something(), 1000)
 
 # Run every 2000 ms (optional timer name, optional sub-thread)
 SchedulerBus.schedule_at_fixed_rate(func() -> void: poll_status(), 2000)
-```
-
-- Measure elapsed time with `StopWatch`:
-
-```gdscript
-var sw := StopWatch.new()
-await ThreadUtils.async_sleep(1000)
-Log.info("cost: {} s", sw.cost_seconds())
 ```
 
 ---
@@ -169,8 +161,6 @@ Log.info("cost: {} s", sw.cost_seconds())
 
 ```gdscript
 Setting.set_bool("sound_enabled", true)
-Setting.set_int("level", 3)
-Setting.set_float("volume", 0.8)
 Setting.set_string("nickname", "player1")
 Setting.save()
 
@@ -182,7 +172,7 @@ var name := Setting.get_string("nickname", "")
 
 ## Utils — common helpers
 
-Prefer `zfoo/utils/` over reimplementing the same logic in game code.
+- Also available: `ArrayUtils`, `CollectionUtils`, `NumberUtils`, `NetUtils`, `HttpUtils`, `IdUtils`, `RateLimitUtils`.
 
 ```gdscript
 # StringUtils
@@ -211,13 +201,3 @@ var item = RandomUtils.random_ele(items)
 await ThreadUtils.async_sleep(500)
 ```
 
-Also available: `ArrayUtils`, `CollectionUtils`, `NumberUtils`, `NetUtils`, `HttpUtils`, `IdUtils`, `RateLimitUtils`.
-
-
----
-
-## Conventions
-
-- Extend framework code in `script/` / `scene/` when possible; change `zfoo/` only when the capability is generic.
-- Use explicit types in GDScript; prefer `:=` for locals when the type is clear.
-- Do not commit secrets, production URLs, or credentials in docs or config tracked in git.
