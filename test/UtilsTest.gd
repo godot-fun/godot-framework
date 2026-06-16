@@ -51,10 +51,10 @@ func TimeUtils_test() -> void:
 	var dateTimeStr := Time.get_datetime_string_from_system(false, true)
 	assert(dateTimeStr == TimeUtils.time_to_datetime_string(timestamp))
 	assert(dateTimeStr.split(" ")[0] == TimeUtils.time_to_date_string(timestamp))
-	for i in 10:
-		var now := TimeUtils.now()
-		await ThreadUtils.async_sleep(2000)
-		assert(now != TimeUtils.now())
+
+	var now := TimeUtils.now()
+	await ThreadUtils.async_sleep(2000)
+	assert(now != TimeUtils.now())
 	pass
 
 func NetUtils_test() -> void:

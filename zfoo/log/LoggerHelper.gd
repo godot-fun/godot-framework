@@ -13,27 +13,23 @@ static func init() -> void:
 
 
 @warning_ignore("unused_parameter")
-static func format_error_message(function: String, file: String, line: int, code: String, rationale: String, editor_notify: bool, error_type: int, script_backtraces: Array[ScriptBacktrace]) -> String:
+static func log_format_error_message(function: String, file: String, line: int, code: String, rationale: String, editor_notify: bool, error_type: int, script_backtraces: Array[ScriptBacktrace]) -> String:
 	# Match Godot console-like format as much as possible.
 	var first_line := ""
 	if !StringUtils.is_blank(code):
-		first_line = StringUtils.format("SCRIPT ERROR: {}", code)
+		first_line = StringUtils.format("{} [ERROR] - Caused by: {}", TimeUtils.date(), code)
 	elif !StringUtils.is_blank(rationale):
-		first_line = StringUtils.format("SCRIPT ERROR: {}", rationale)
+		first_line = StringUtils.format("{} [ERROR] - Caused by: {}", TimeUtils.date(), rationale)
 	else:
-		first_line = "SCRIPT ERROR: (no details)"
+		first_line = StringUtils.format("{} [ERROR] - (no details)", TimeUtils.date())
 
 	var parts: Array[String] = []
 	parts.append(first_line)
-	parts.append(StringUtils.format("   at: {} ({}:{})", function, file, line))
 
 	if script_backtraces != null and script_backtraces.size() > 0:
-		parts.append("   GDScript backtrace (most recent call first):")
-		var idx := 0
 		for bt in script_backtraces:
-			parts.append(StringUtils.format("\t[{}] {}", idx, str(bt)))
-			idx += 1
-
+			parts.append(StringUtils.format("at {}", str(bt)))
+	gdf.events.log_error.emit()
 	return "\n".join(parts)
 
 

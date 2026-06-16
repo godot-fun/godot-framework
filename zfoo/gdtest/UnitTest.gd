@@ -5,16 +5,19 @@
 
 @export var enable_test_logging: bool = false
 
+var error_occurred: bool = false
+
 func _ready() -> void:
 	var path: String = get_tree().current_scene.scene_file_path
 	var parent_dir := path.get_base_dir()
 	var files: Array[String] = FileUtils.get_all_files_in_folder(parent_dir, include_subfolders)
+	gdf.events.log_error.connect(func() -> void: error_occurred = true)
 	for file in files:
 		if !file.ends_with(".gd"):
 			continue
 		var res: Resource = ResourceLoader.load(file)
 		if res is Script:
-			unit_test(res)
+			await unit_test(res)
 	gdf.quit()
 	pass
 
@@ -39,9 +42,8 @@ func unit_test(script: Script) -> void:
 			test_methods.push_back(method_name)
 	
 	for method in static_test_methods:
-		script.call(method)
-		if enable_test_logging:
-			Log.info("🟢 PASS | [{}] | {}", script.resource_path, method)
+		await script.call(method)
+		await check_unit(script, method)
 	
 	if ArrayUtils.is_not_empty(test_methods):
 		if !script.can_instantiate():
@@ -50,9 +52,18 @@ func unit_test(script: Script) -> void:
 			return
 		var obj: Object= script.new()
 		for method in test_methods:
-			obj.call(method)
-			if enable_test_logging:
-				Log.info("🟢 PASS | [{}] | {}", script.resource_path, method)
+			await obj.call(method)
+			await check_unit(script, method)
 	var test_unit := static_test_methods.size() + test_methods.size()
 	Log.info("✅ PASS | [{}] | Run test unit:[{}] | {} seconds", script.resource_path, test_unit, stop_watch.cost_seconds())
+	pass
+
+
+func check_unit(script: Script, method: String) -> void:
+	if error_occurred:
+		Log.error("❌ FAIL | [{}] | {}", script.resource_path, method)
+		await gdf.quit(1)
+		return
+	if enable_test_logging:
+		Log.info("🟢 PASS | [{}] | {}", script.resource_path, method)
 	pass

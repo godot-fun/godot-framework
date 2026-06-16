@@ -62,3 +62,13 @@ static func quit(exit_code: int = 0) -> void:
 		await gdf_node.get_tree().process_frame
 	gdf_node.get_tree().quit(exit_code)
 	pass
+
+####################################################################################################
+# internal event bus
+static var events := Events.new()
+
+
+class Events:
+	signal log_error
+	pass
+####################################################################################################
