@@ -4,7 +4,7 @@ A lightweight game framework for godot engine
 
 ## Quick start
 
-1. Copy the `zfoo/` folder into your Godot project.
+1. Copy the `zfoo/` folder into your Godot project.(or run `sync-godot-framework.ps1` in your project)
 2. Register the framework scene as an **Autoload** (Project → Project Settings → Autoload):
 
    | Name            | Path                          |
