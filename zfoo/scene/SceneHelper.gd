@@ -26,7 +26,7 @@ static func async_change_scene_to_packed(scene: PackedScene, transition: ISceneT
 	var sceneTree: SceneTree = gdf.gdf_node.get_tree()
 	var error := sceneTree.change_scene_to_packed(scene)
 	if error:
-		printerr(StringUtils.format("load scene:[{}] error:[{}] in [{}]", scene, error, sceneTree))
+		Log.error("load scene:[{}] error:[{}] in [{}]", scene, error, sceneTree)
 	await transition.change_after()
 	transition.end()
 	pass

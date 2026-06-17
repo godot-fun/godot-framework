@@ -166,7 +166,7 @@ func destroy() -> void:
 func _fail(err: String) -> void:
 	state = State.ERROR
 	message = err
-	printerr(StringUtils.format("{} - {}", TimeUtils.date(), err))
+	Log.error("{}", err)
 	state_error.emit()
 	pass
 

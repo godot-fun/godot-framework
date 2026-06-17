@@ -39,7 +39,7 @@ func _poll_task(task: HttpTask) -> void:
 	var now := TimeUtils.current_time_millis()
 	if (now - task.startTime) > DEFAULT_TIMEOUT_MILLIS:
 		fail(task)
-		printerr(StringUtils.format("{} - HTTP Request timeout url:[{}]", TimeUtils.date(), task.url))
+		Log.error("HTTP Request timeout url:[{}]", task.url)
 		return
 	
 	var status := client.get_status()
@@ -47,26 +47,26 @@ func _poll_task(task: HttpTask) -> void:
 	match status:
 		HTTPClient.STATUS_CANT_RESOLVE:
 			fail(task)
-			printerr(StringUtils.format("{} - Http resolve error:[STATUS_CANT_RESOLVE] url:[{}]", TimeUtils.date(), task.url))
+			Log.error("Http resolve error:[STATUS_CANT_RESOLVE] url:[{}]", task.url)
 		HTTPClient.STATUS_CANT_CONNECT:
 			fail(task)
-			printerr(StringUtils.format("{} - Http connect error:[STATUS_CANT_CONNECT] url:[{}]", TimeUtils.date(), task.url))
+			Log.error("Http connect error:[STATUS_CANT_CONNECT] url:[{}]", task.url)
 		HTTPClient.STATUS_TLS_HANDSHAKE_ERROR:
 			fail(task)
-			printerr(StringUtils.format("{} - Http tls error:[STATUS_TLS_HANDSHAKE_ERROR] url:[{}]", TimeUtils.date(), task.url))
+			Log.error("Http tls error:[STATUS_TLS_HANDSHAKE_ERROR] url:[{}]", task.url)
 		HTTPClient.STATUS_DISCONNECTED:
 			fail(task)
-			printerr(StringUtils.format("{} - Http connection error:[STATUS_DISCONNECTED] url:[{}]", TimeUtils.date(), task.url))
+			Log.error("Http connection error:[STATUS_DISCONNECTED] url:[{}]", task.url)
 		HTTPClient.STATUS_CONNECTION_ERROR:
 			fail(task)
-			printerr(StringUtils.format("{} - Http connection error:[STATUS_CONNECTION_ERROR] url:[{}]", TimeUtils.date(), task.url))
+			Log.error("Http connection error:[STATUS_CONNECTION_ERROR] url:[{}]", task.url)
 		HTTPClient.STATUS_REQUESTING, HTTPClient.STATUS_RESOLVING, HTTPClient.STATUS_CONNECTING:
 			pass
 		HTTPClient.STATUS_CONNECTED:
 			var err := client.request(task.method, HttpUtils.get_path_from_url(task.url), task.headers, task.body)
 			if err != OK:
 				fail(task)
-				printerr(StringUtils.format("{} - Http request error url:[{}]", TimeUtils.date(), task.url))
+				Log.error("Http request error url:[{}]", task.url)
 		HTTPClient.STATUS_BODY:
 			if client.has_response():
 				var chunk := client.read_response_body_chunk()

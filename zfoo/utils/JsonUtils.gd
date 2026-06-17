@@ -7,7 +7,7 @@ static func json_to_object(json: String, type: Variant) -> Variant:
 		return
 	var data = JSON.parse_string(json)
 	if data == null:
-		printerr(StringUtils.format("{} - Json pars error:[{}]", TimeUtils.date(), json))
+		Log.error("Json pars error:[{}]", json)
 		return
 	var obj = type.new()
 	for key in data.keys():
@@ -53,5 +53,5 @@ static func object_to_json(obj: Variant) -> String:
 				array.push_back("\"" + propertyName + "\": " + object_to_json(value))
 			return "{" + ", ".join(array) + "}"
 		_:
-			printerr(StringUtils.format("{} - unknow type:[{}]", TimeUtils.date(), type))
+			Log.error("unknow type:[{}]", type)
 	return ""

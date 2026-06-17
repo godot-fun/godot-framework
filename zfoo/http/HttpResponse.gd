@@ -19,7 +19,7 @@ func get_body_json() -> Variant:
 		return null
 	var json := JSON.new()
 	if json.parse(text) != OK:
-		printerr(StringUtils.format("{} - HttpResponse parse JSON failed: {}", TimeUtils.date(), json.get_error_message()))
+		Log.error("HttpResponse parse JSON failed: {}", json.get_error_message())
 		return null
 	return json.data
 

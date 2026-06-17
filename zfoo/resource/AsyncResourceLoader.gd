@@ -21,10 +21,10 @@ func update() -> void:
 		var status := ResourceLoader.load_threaded_get_status(task.path)
 		match status:
 			ResourceLoader.ThreadLoadStatus.THREAD_LOAD_INVALID_RESOURCE:
-				printerr(StringUtils.format("invalid resource:[{}] THREAD_LOAD_INVALID_RESOURCE", task.path))
+				Log.error("invalid resource:[{}] THREAD_LOAD_INVALID_RESOURCE", task.path)
 				finishedTasks.append(task)
 			ResourceLoader.ThreadLoadStatus.THREAD_LOAD_FAILED:
-				printerr(StringUtils.format("failed to load resource:[{}] THREAD_LOAD_FAILED", task.path))
+				Log.error("failed to load resource:[{}] THREAD_LOAD_FAILED", task.path)
 				finishedTasks.append(task)
 			ResourceLoader.ThreadLoadStatus.THREAD_LOAD_LOADED:
 				var resource := ResourceLoader.load(task.path)
@@ -44,11 +44,11 @@ func async_load(path: String) -> Resource:
 	if ResourceLoader.has_cached(path):
 		return ResourceLoader.load(path)
 	if !ResourceLoader.exists(path):
-		printerr(StringUtils.format("resource not exist in the path:[{}]", path))
+		Log.error("resource not exist in the path:[{}]", path)
 		return null
 	var error = ResourceLoader.load_threaded_request(path)
 	if error:
-		printerr(StringUtils.format("failed to load resource:[{}]", path))
+		Log.error("failed to load resource:[{}]", path)
 		return null
 	var signalId = IdUtils.local_id()
 	var task: LoadResourceTask = LoadResourceTask.new(signalId, path)
