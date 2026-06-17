@@ -62,23 +62,24 @@ func receive() -> DecodedPacketInfo:
 			client.disconnect_from_host()
 			client.connect_to_host(host, port)
 			if current_status != StreamPeerTCP.STATUS_NONE:
-				Log.error("status none and reconnect [{}:{}]", host, port)
 				current_status = StreamPeerTCP.STATUS_NONE
+				Log.error("status none and reconnect [{}:{}]", host, port)
 		StreamPeerTCP.STATUS_ERROR:
 			# Auto Reconnect
 			client.disconnect_from_host()
 			client.connect_to_host(host, port)
 			if current_status != StreamPeerTCP.STATUS_ERROR:
-				Log.error("status error [{}:{}]", host, port)
 				current_status = StreamPeerTCP.STATUS_ERROR
+				Log.error("status error [{}:{}]", host, port)
 				gdf.callable_deferred(func() -> void: on_error.emit())
 		StreamPeerTCP.STATUS_CONNECTING:
 			if current_status != StreamPeerTCP.STATUS_CONNECTING:
-				Log.info("status connecting [{}:{}]", host, port)
 				current_status = StreamPeerTCP.STATUS_CONNECTING
+				Log.info("status connecting [{}:{}]", host, port)
 				gdf.callable_deferred(func() -> void: on_connecting.emit())
 		StreamPeerTCP.STATUS_CONNECTED:
 			if current_status != StreamPeerTCP.STATUS_CONNECTED:
+				current_status = StreamPeerTCP.STATUS_CONNECTED
 				Log.info("status connected [{}:{}]", host, port)
 				gdf.callable_deferred(func() -> void: on_connected.emit())
 			var decodedPacketInfo := codec.decode_stream_peer(client)
