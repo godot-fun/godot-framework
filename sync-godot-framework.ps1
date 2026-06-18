@@ -21,25 +21,44 @@ function Remove-TempRoot {
 	}
 }
 
+function Copy-DirReplace {
+	param(
+		[string]$Source,
+		[string]$Destination
+	)
+
+	if (-not (Test-Path $Source)) {
+		throw "Directory not found: $Source"
+	}
+
+	Write-Host "Replacing $Destination"
+	if (Test-Path $Destination) {
+		Remove-Item -Path $Destination -Recurse -Force
+	}
+	Copy-Item -Path $Source -Destination $Destination -Recurse -Force
+}
+
+function Copy-DirOverlay {
+	param(
+		[string]$Source,
+		[string]$Destination
+	)
+
+	if (-not (Test-Path $Source)) {
+		throw "Directory not found: $Source"
+	}
+
+	Write-Host "Overlaying $Destination"
+	Copy-Item -Path $Source -Destination $Destination -Recurse -Force
+}
+
 function Copy-FrameworkDirs {
 	param(
 		[string]$SourceRoot
 	)
 
-	foreach ($dir in @(".cursor", "zfoo")) {
-		$src = Join-Path $SourceRoot $dir
-		$dst = Join-Path $ProjectRoot $dir
-
-		if (-not (Test-Path $src)) {
-			throw "Directory not found in source repo: $dir"
-		}
-
-		Write-Host "Copying $dir -> $dst"
-		if (Test-Path $dst) {
-			Remove-Item -Path $dst -Recurse -Force
-		}
-		Copy-Item -Path $src -Destination $dst -Recurse -Force
-	}
+	Copy-DirOverlay -Source (Join-Path $SourceRoot ".cursor") -Destination (Join-Path $ProjectRoot ".cursor")
+	Copy-DirReplace -Source (Join-Path $SourceRoot "zfoo") -Destination (Join-Path $ProjectRoot "zfoo")
 }
 
 function Copy-ReadmeToZfoo {
