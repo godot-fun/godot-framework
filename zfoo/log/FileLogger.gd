@@ -8,7 +8,7 @@ func _init():
 	log_file.seek_end()
 	pass	
 
-func append_line(line: String, flush_immediately: bool = true) -> void:
+func append_line(line: String, flush_immediately: bool = false) -> void:
 	mutex.lock()
 
 	log_file.store_string(line)
@@ -20,7 +20,7 @@ func append_line(line: String, flush_immediately: bool = true) -> void:
 
 # Logger-Interface-Implement-Start
 func _log_error(function: String, file: String, line: int, code: String, rationale: String, editor_notify: bool, error_type: int, script_backtraces: Array[ScriptBacktrace]) -> void:
-	append_line(LoggerHelper.log_format_error_message(function, file, line, code, rationale, editor_notify, error_type, script_backtraces))
+	append_line(LoggerHelper.log_format_error_message(function, file, line, code, rationale, editor_notify, error_type, script_backtraces), true)
 	pass
 
 
