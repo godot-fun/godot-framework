@@ -42,6 +42,22 @@ function Copy-FrameworkDirs {
 	}
 }
 
+function Copy-ReadmeToZfoo {
+	param(
+		[string]$SourceRoot
+	)
+
+	$src = Join-Path $SourceRoot "README.md"
+	$dst = Join-Path $ProjectRoot "zfoo\README.md"
+
+	if (-not (Test-Path $src)) {
+		throw "README.md not found in source repo"
+	}
+
+	Write-Host "Copying README.md -> $dst"
+	Copy-Item -Path $src -Destination $dst -Force
+}
+
 try {
 	Write-Host "Cloning $RepoUrl ..."
 	git clone --depth 1 $RepoUrl $CloneDir
@@ -50,6 +66,7 @@ try {
 	}
 
 	Copy-FrameworkDirs -SourceRoot $CloneDir
+	Copy-ReadmeToZfoo -SourceRoot $CloneDir
 
 	Write-Host "Sync completed."
 } catch {
