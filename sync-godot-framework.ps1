@@ -49,7 +49,10 @@ function Copy-DirOverlay {
 	}
 
 	Write-Host "Overlaying $Destination"
-	Copy-Item -Path $Source -Destination $Destination -Recurse -Force
+	if (-not (Test-Path $Destination)) {
+		New-Item -ItemType Directory -Path $Destination -Force | Out-Null
+	}
+	Copy-Item -Path (Join-Path $Source "*") -Destination $Destination -Recurse -Force
 }
 
 function Copy-FrameworkDirs {
