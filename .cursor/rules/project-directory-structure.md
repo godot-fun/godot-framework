@@ -1,5 +1,5 @@
 ---
-description: Project directory layout — resources by type, game code in game/
+description: Project directory layout — resources by type, scenes and scripts at root
 alwaysApply: true
 ---
 
@@ -15,7 +15,8 @@ project-root/
 ├── font/          # Fonts (optional)
 ├── config/        # CSV/JSON tables (optional)
 ├── shader/        # Custom shaders (optional)
-├── game/          # Scenes, scripts, systems, data models
+├── scene/         # Runnable and instanced .tscn scenes
+├── script/        # Game scripts (.gd), systems, data models
 ├── test/          # Unit tests (UnitTest.gd scenes)
 └── project.godot
 ```
@@ -44,18 +45,19 @@ audio/
 
 **Other resource roots** (add when needed): `font/`, `config/`, `shader/`.
 
-## Game code — `game/`
+## Game code — `scene/` and `script/`
 
 ```
-game/
+scene/
+├── boot/
+├── main/
+├── gameplay/
+└── ui/
+
+script/
 ├── autoload/      # Game Autoloads (after GodotFramework)
 ├── core/          # Constants, ResPath, shared base classes
 ├── data/          # Resource classes and .tres instances
-├── scenes/        # Runnable and instanced scenes
-│   ├── boot/
-│   ├── main/
-│   ├── gameplay/
-│   └── ui/
 ├── systems/       # Pure logic (inventory, save, quest, …)
 └── network/       # Packets and codec (zfoo Router)
 ```
