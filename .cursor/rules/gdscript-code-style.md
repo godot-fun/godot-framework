@@ -9,6 +9,7 @@ alwaysApply: false
 - **Types**: Use explicit types on function signatures and return values (`-> void`, etc.). Use the `class_name` type when a class has one. **Prefer `:=` for locals** to lock in the inferred type at declaration; use `var x = ...` only when you need Variant or mixed types.
 - **Docs**: Use `##` comments for scene entry points or complex logic. Match the tone of nearby files.
 - **Nodes**: Prefer `@onready var name: Type = $Path`.
+- **Trailing pass**: If a function has no `return` statement, end the body with `pass`.
 
 # Underscores and naming (Godot 4)
 
@@ -32,5 +33,9 @@ func _ready() -> void:
 	pass
 
 func on_buy_item() -> void:
+	pass
+
+func refresh_ui() -> void:
+	update_labels()
 	pass
 ```
