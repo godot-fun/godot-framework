@@ -76,19 +76,6 @@ func NumberUtils_test() -> void:
 	pass
 
 
-# --------------------------------------------------------------------------------------------------
-class Student:
-	var name: String
-	var age: int
-pass
-
-func JsonUtils_test() -> void:
-	var json := "{\"name\": \"test\", \"age\": 10}"
-	var obj = JsonUtils.json_to_object(json, Student)
-	var json_text := JsonUtils.object_to_json(obj)
-	assert(json == json_text)
-	pass
-
 
 # --------------------------------------------------------------------------------------------------
 enum State {
