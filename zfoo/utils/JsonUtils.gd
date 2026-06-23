@@ -150,19 +150,10 @@ static func convert_dictionary_value(item: Variant, typed_dict: Dictionary) -> V
 			return item
 
 # ---------------------------------------------------------------------------------------------------------------------
-static func get_object_property_script(obj: Object, property_name: String, hint_string: String) -> Script:
-	var property_value = obj.get(property_name)
-	if property_value is Array:
-		var typed_script = (property_value as Array).get_typed_script()
-		if typed_script is Script:
-			return typed_script
-#	Log.error("cannot parse json property:[{}] type:[{}]", property_name, hint_string)
-	return null
-
 static func convert_json_array(element_type_name: String, value: Variant, obj: Object, property_name: String) -> Variant:
 	if typeof(value) != TYPE_ARRAY:
 		return value
-	var element_script := get_object_property_script(obj, property_name, element_type_name)
+	var element_script = obj.get(property_name).get_typed_script()
 	if element_script != null:
 		return convert_json_object_array(value, element_script)
 	match element_type_name:
