@@ -1,4 +1,4 @@
-
+﻿
 func ArrayUtils_test() -> void:
 	var array: Array[int] = []
 	assert(ArrayUtils.is_empty(array))
