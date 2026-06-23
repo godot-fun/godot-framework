@@ -1,7 +1,6 @@
 class_name JsonUtils
 extends Object
 
-# Nested classes are not supported.
 static func json_to_object(json: String, type: Variant) -> Variant:
 	if StringUtils.is_blank(json):
 		return
@@ -9,6 +8,13 @@ static func json_to_object(json: String, type: Variant) -> Variant:
 	if data == null:
 		Log.error("Json pars error:[{}]", json)
 		return
+	if typeof(data) != TYPE_DICTIONARY:
+		Log.error("Json root type error:[{}]", json)
+		return
+	return dict_to_object(data, type)
+
+
+static func dict_to_object(data: Dictionary, type: Variant) -> Variant:
 	if !ReflectionUtils.has_empty_constructor(type):
 		return
 	var obj = type.new()
@@ -16,7 +22,7 @@ static func json_to_object(json: String, type: Variant) -> Variant:
 	for key in data.keys():
 		var value = data[key]
 		if property_map.has(key):
-			value = convert_json_value(property_map[key], value)
+			value = convert_json_value(property_map[key], value, obj)
 		obj.set(key, value)
 	return obj
 
@@ -58,14 +64,15 @@ static func object_to_json(obj: Variant) -> String:
 
 
 
-static func convert_json_value(property: Dictionary, value: Variant) -> Variant:
+static func convert_json_value(property: Dictionary, value: Variant, obj: Object) -> Variant:
 	if value == null:
 		return null
 	var property_type: int = property.type
 	var hint: int = property.hint
 	var hint_string: String = property.get("hint_string", "")
+	var property_name := property.name as String
 	if hint == PROPERTY_HINT_ARRAY_TYPE or property_type == TYPE_ARRAY:
-		return convert_json_array(hint_string, value)
+		return convert_json_array(hint_string, value, obj, property_name)
 	match property_type:
 		TYPE_BOOL:
 			return bool(value)
@@ -75,15 +82,32 @@ static func convert_json_value(property: Dictionary, value: Variant) -> Variant:
 			return float(value)
 		TYPE_STRING:
 			return str(value)
+		TYPE_OBJECT:
+			if typeof(value) == TYPE_DICTIONARY:
+				var element_script := get_object_property_script(obj, property_name, hint_string)
+				if element_script != null:
+					return dict_to_object(value, element_script)
+			return value
 		_:
 			return value
 
 
-static func convert_json_array(element_type_name: String, value: Variant) -> Variant:
+static func get_object_property_script(obj: Object, property_name: String, hint_string: String) -> Script:
+	var property_value = obj.get(property_name)
+	if property_value is Array:
+		var typed_script = (property_value as Array).get_typed_script()
+		if typed_script is Script:
+			return typed_script
+#	Log.error("cannot parse json property:[{}] type:[{}]", property_name, hint_string)
+	return null
+
+
+static func convert_json_array(element_type_name: String, value: Variant, obj: Object, property_name: String) -> Variant:
 	if typeof(value) != TYPE_ARRAY:
 		return value
-	if StringUtils.is_blank(element_type_name):
-		return value
+	var element_script := get_object_property_script(obj, property_name, element_type_name)
+	if element_script != null:
+		return convert_json_object_array(value, element_script)
 	match element_type_name:
 		"String":
 			var result: Array[String] = []
@@ -107,3 +131,16 @@ static func convert_json_array(element_type_name: String, value: Variant) -> Var
 			return result
 		_:
 			return value
+
+
+static func convert_json_object_array(value: Variant, element_script: Script) -> Array:
+	var result: Array = []
+	for item in value:
+		if typeof(item) == TYPE_DICTIONARY:
+			var element = dict_to_object(item, element_script)
+			if element != null:
+				result.append(element)
+		else:
+			result.append(item)
+	var base_type := element_script.get_instance_base_type()
+	return Array(result, TYPE_OBJECT, base_type, element_script)
