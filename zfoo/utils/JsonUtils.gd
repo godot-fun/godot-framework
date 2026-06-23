@@ -49,7 +49,7 @@ static func object_to_json(obj: Variant) -> String:
 			var array: PackedStringArray = PackedStringArray()
 			for key in obj:
 				var value = obj.get(key)
-				array.push_back("\"" + object_to_json(key) + "\": " + object_to_json(value))
+				array.push_back(object_to_json(key) + ": " + object_to_json(value))
 			return "{" + ", ".join(array) + "}"
 		TYPE_OBJECT:
 			var array: PackedStringArray = PackedStringArray()
@@ -73,6 +73,8 @@ static func convert_json_value(property: Dictionary, value: Variant, obj: Object
 	var property_name := property.name as String
 	if hint == PROPERTY_HINT_ARRAY_TYPE or property_type == TYPE_ARRAY:
 		return convert_json_array(hint_string, value, obj, property_name)
+	if hint == PROPERTY_HINT_DICTIONARY_TYPE or property_type == TYPE_DICTIONARY:
+		return convert_json_dictionary(value, obj, property_name)
 	match property_type:
 		TYPE_BOOL:
 			return bool(value)
@@ -83,10 +85,6 @@ static func convert_json_value(property: Dictionary, value: Variant, obj: Object
 		TYPE_STRING:
 			return str(value)
 		TYPE_OBJECT:
-			if typeof(value) == TYPE_DICTIONARY:
-				var element_script := get_object_property_script(obj, property_name, hint_string)
-				if element_script != null:
-					return dict_to_object(value, element_script)
 			return value
 		_:
 			return value
@@ -102,6 +100,66 @@ static func get_object_property_script(obj: Object, property_name: String, hint_
 	return null
 
 
+static func convert_json_dictionary(value: Variant, obj: Object, property_name: String) -> Variant:
+	if typeof(value) != TYPE_DICTIONARY:
+		return value
+	var template = obj.get(property_name)
+	if !(template is Dictionary):
+		return value
+	var typed_dict := template as Dictionary
+	var result: Dictionary = {}
+	for key in value:
+		result[convert_dictionary_key(key, typed_dict)] = convert_dictionary_value(value[key], typed_dict)
+	var key_type := typed_dict.get_typed_key_builtin()
+	var value_type := typed_dict.get_typed_value_builtin()
+	if key_type == TYPE_NIL and value_type == TYPE_NIL:
+		return result
+	return Dictionary(
+		result,
+		key_type,
+		typed_dict.get_typed_key_class_name(),
+		typed_dict.get_typed_key_script(),
+		value_type,
+		typed_dict.get_typed_value_class_name(),
+		typed_dict.get_typed_value_script()
+	)
+
+
+static func convert_dictionary_key(key: Variant, typed_dict: Dictionary) -> Variant:
+	match typed_dict.get_typed_key_builtin():
+		TYPE_STRING:
+			return str(key)
+		TYPE_INT:
+			return int(key)
+		TYPE_FLOAT:
+			return float(key)
+		TYPE_BOOL:
+			return bool(key)
+		_:
+			return key
+
+
+static func convert_dictionary_value(item: Variant, typed_dict: Dictionary) -> Variant:
+	var value_script = typed_dict.get_typed_value_script()
+	if value_script is Script:
+		if typeof(item) == TYPE_DICTIONARY:
+			var element = dict_to_object(item, value_script)
+			if element != null:
+				return element
+		return item
+	match typed_dict.get_typed_value_builtin():
+		TYPE_STRING:
+			return str(item)
+		TYPE_INT:
+			return int(item)
+		TYPE_FLOAT:
+			return float(item)
+		TYPE_BOOL:
+			return bool(item)
+		_:
+			return item
+
+# ---------------------------------------------------------------------------------------------------------------------
 static func convert_json_array(element_type_name: String, value: Variant, obj: Object, property_name: String) -> Variant:
 	if typeof(value) != TYPE_ARRAY:
 		return value
