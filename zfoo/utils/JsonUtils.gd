@@ -91,19 +91,14 @@ static func convert_json_value(property: Dictionary, value: Variant, obj: Object
 
 # ----------------------------------------------------------------------------------------------------------------------
 static func convert_json_dictionary(value: Variant, obj: Object, property_name: String) -> Variant:
-	if typeof(value) != TYPE_DICTIONARY:
+	var typed_dict: Dictionary = obj.get(property_name)
+	var key_type := typed_dict.get_typed_key_builtin()
+	var value_type := typed_dict.get_typed_value_builtin()
+	if key_type == TYPE_NIL || value_type == TYPE_NIL:
 		return value
-	var template = obj.get(property_name)
-	if !(template is Dictionary):
-		return value
-	var typed_dict := template as Dictionary
 	var result: Dictionary = {}
 	for key in value:
 		result[convert_dictionary_key(key, typed_dict)] = convert_dictionary_value(value[key], typed_dict)
-	var key_type := typed_dict.get_typed_key_builtin()
-	var value_type := typed_dict.get_typed_value_builtin()
-	if key_type == TYPE_NIL and value_type == TYPE_NIL:
-		return result
 	return Dictionary(
 		result,
 		key_type,
@@ -151,8 +146,6 @@ static func convert_dictionary_value(item: Variant, typed_dict: Dictionary) -> V
 
 # ---------------------------------------------------------------------------------------------------------------------
 static func convert_json_array(element_type_name: String, value: Variant, obj: Object, property_name: String) -> Variant:
-	if typeof(value) != TYPE_ARRAY:
-		return value
 	var element_script = obj.get(property_name).get_typed_script()
 	if element_script != null:
 		return convert_json_object_array(value, element_script)
