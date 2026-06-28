@@ -200,3 +200,7 @@ var item = RandomUtils.random_ele(items)
 await ThreadUtils.async_sleep(500)
 ```
 
+
+# Rules
+
+- Only change godot framework `zfoo/` when you have a clear reason.
