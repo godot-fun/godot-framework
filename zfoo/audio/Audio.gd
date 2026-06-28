@@ -93,7 +93,9 @@ static func play_music_random(duration: float = 1.0) -> void:
 	pass
 
 
-static func _play_stream(bus: AudioBusType, path: String) -> void:
+static func play_stream(bus: AudioBusType, path: String) -> void:
+	if StringUtils.is_blank(path):
+		return
 	var player: AudioStreamPlayer = audio_map[bus]
 	var resource: Variant = await ResourceHelper.async_load(path)
 	if resource == null:
@@ -105,13 +107,13 @@ static func _play_stream(bus: AudioBusType, path: String) -> void:
 ####################################################################################################
 # sound
 static func play_sound(path: String) -> void:
-	await _play_stream(AudioBusType.SoundEffect, path)
+	await play_stream(AudioBusType.SoundEffect, path)
 	pass
 
 ####################################################################################################
 # voice
 static func play_voice(path: String) -> void:
-	await _play_stream(AudioBusType.Voice, path)
+	await play_stream(AudioBusType.Voice, path)
 	pass
 
 
