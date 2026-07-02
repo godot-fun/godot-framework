@@ -4,8 +4,7 @@ class_name EffectAnimation2D
 const ANIMATION_NAME := "default"
 
 var animation_resource: String
-var frame_size: Vector2i
-var frame_count: int
+var frame_grid: Vector2i
 var animation_fps: float
 var scale_ratio: float
 
@@ -21,18 +20,20 @@ func _ready() -> void:
 
 
 func setup_sprite_frames() -> void:
-	var sheet: Texture2D = load(animation_resource)
+	var animation_texture: Texture2D = load(animation_resource)
+	var frame_size := Vector2i(animation_texture.get_width() / frame_grid.x, animation_texture.get_height() / frame_grid.y)
 	var frames := SpriteFrames.new()
 	if not frames.has_animation(ANIMATION_NAME):
 		frames.add_animation(ANIMATION_NAME)
 	frames.set_animation_speed(ANIMATION_NAME, animation_fps)
 	frames.set_animation_loop(ANIMATION_NAME, false)
 
-	for i in frame_count:
-		var atlas := AtlasTexture.new()
-		atlas.atlas = sheet
-		atlas.region = Rect2(i * frame_size.x, 0, frame_size.x, frame_size.y)
-		frames.add_frame(ANIMATION_NAME, atlas)
+	for row in frame_grid.y:
+		for col in frame_grid.x:
+			var atlas := AtlasTexture.new()
+			atlas.atlas = animation_texture
+			atlas.region = Rect2(col * frame_size.x, row * frame_size.y, frame_size.x, frame_size.y)
+			frames.add_frame(ANIMATION_NAME, atlas)
 
 	sprite_frames = frames
 	pass
@@ -48,15 +49,13 @@ static func spawn(
 	pos: Vector2,
 	parent: Node,
 	_animation_resource: String,
+	_frame_grid: Vector2i = Vector2i(8, 1),
 	_scale_ratio: float = 1,
-	_frame_count: int = 8,
-	_frame_size: Vector2i = Vector2i(256, 256),
 	_animation_fps: float = 14.0
 ) -> void:
 	var effect := EffectAnimation2D.new()
 	effect.animation_resource = _animation_resource
-	effect.frame_size = _frame_size
-	effect.frame_count = _frame_count
+	effect.frame_grid = _frame_grid
 	effect.animation_fps = _animation_fps
 	effect.scale_ratio = _scale_ratio
 	effect.global_position = pos
