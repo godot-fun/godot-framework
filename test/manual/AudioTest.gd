@@ -19,9 +19,9 @@ func Linear_test() -> void:
 	pass
 
 func pressedPlayMusicButton():
-	Audio.play_musics(["test/audio/All_the_Way_North.mp3", "test/audio/White_Windmill.mp3"])
+	Audio.play_musics(["test/asset/All_the_Way_North.mp3", "test/asset/White_Windmill.mp3"])
 	pass
 
 func pressedPlaySoundButton():
-	Audio.play_sound("test/audio/cheer.mp3")
+	Audio.play_sound("test/asset/cheer.mp3")
 	pass
