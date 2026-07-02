@@ -61,6 +61,15 @@ var playing := Audio.is_playing_voice()
 
 ---
 
+## Animation
+
+```gdscript
+# plays a one-shot sprite sheet animation and removes itself when finished. Multi-row sheet: 4 columns × 4 rows, scale 0.5, 13 fps
+EffectAnimation2D.spawn(Vector2(500, 200), self, "res://effects/attack.png", Vector2i(4, 4), 0.5, 13)
+```
+
+---
+
 ## Unit tests
 
 - Attach `zfoo/gdtest/UnitTest.gd` to a scene; `.gd` files in the same folder are scanned on startup.
