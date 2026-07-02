@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dh1b8duahxofc"]
+
+[ext_resource type="Script" uid="uid://cx7oxrmuetl1m" path="res://test/animation/animation_2d_test.gd" id="1_ry4v6"]
+
+[node name="Animation2dTest" type="Node2D" unique_id=910238805]
+script = ExtResource("1_ry4v6")
