@@ -1,7 +1,7 @@
 ---
 description: GDScript code style
 globs: "**/*.gd"
-alwaysApply: false
+alwaysApply: true
 ---
 
 # GDScript (this project)
